@@ -1,24 +1,22 @@
-import React from 'react'
+import React, {use, useEffect, useState} from 'react';
+import { listEmployees } from '../services/EmployeeService';
 
 
 const ListEmpolyeeComponent = () => {
+   
+  const [employees, setEmployees] = useState([]);
 
-  const dummyData = [{
-    "id": 1,
-    "firstName": "John",
-    "lastName": "Doe",
-    "email": "john@gmail.com",
-},
-{
-    "id": 2,
-    "firstName": "Jane",
-    "lastName": "Doe",
-    "email": "jane@gmail.com"
-}
-];  
+  useEffect(() => {
+    listEmployees().then((response) => {
+      setEmployees(response.data);
+    }).catch((error) => {
+      console.error("Error fetching employees:", error);
+    });
+  }, []);
+  
 
   return (
-    <div>
+    <div className='container'>
       <h2 className="text-center">Employees List</h2>
       <table className="table table-striped table-bordered">
         <thead>
@@ -30,7 +28,7 @@ const ListEmpolyeeComponent = () => {
           </tr>
         </thead>
         <tbody>
-          {dummyData.map(employee => (
+          {employees.map(employee => (
             <tr key={employee.id}>
               <td>{employee.id}</td>
               <td>{employee.firstName}</td>
