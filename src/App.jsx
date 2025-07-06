@@ -1,11 +1,12 @@
 import './App.css'
+import ListEmpolyeeComponent from './components/ListEmpolyeeComponent'
 
 function App() {
 
 
   return (
     <>
-      <h1>Welcome to My React App</h1>
+      <ListEmpolyeeComponent />
     </>
   )
 }
