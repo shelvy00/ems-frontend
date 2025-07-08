@@ -1,12 +1,14 @@
-import React, {useState } from 'react'
-import { createEmployee } from '../services/EmployeeService';
-import { useNavigate } from 'react-router-dom';
+import React, {useEffect, useState } from 'react'
+import { createEmployee, getEmployee } from '../services/EmployeeService';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const EmployeeComponent = () => {
 
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
+
+    const { id } = useParams(); // Get the employee ID from the URL parameters if editing
 
     const [errors, setErrors] = useState({
         firstName: '',
@@ -15,7 +17,25 @@ const EmployeeComponent = () => {
     });
 
     const navigator = useNavigate();
-    
+
+    // If an ID is present, fetch the employee data to pre-fill the form
+    // This is useful for editing an existing employee
+    // If no ID is present, it will be treated as a new employee creation
+    // This useEffect will run when the component mounts or when the ID changes
+    useEffect(() => {
+        if (id) {
+            getEmployee(id).then((response) => {
+                const employee = response.data;
+                setFirstName(employee.firstName);
+                setLastName(employee.lastName);
+                setEmail(employee.email);
+            }).catch((error) => {
+                console.error("Error fetching employee data:", error);
+            });
+        }
+    }, [id]);
+
+
     const saveEmployee = (e) => {
         e.preventDefault();
 
@@ -60,7 +80,9 @@ const EmployeeComponent = () => {
 
         setErrors(errorsCopy);
         return valid;
-    }
+    };
+
+    const pageTitle = id ? <h2 className='text-center'>Update Employee</h2> : <h2 className='text-center'>Add Employee</h2>;
 
 
   return (
@@ -68,7 +90,7 @@ const EmployeeComponent = () => {
       <br /> <br /> 
       <div className='row'>
         <div className='card col-md-6 offset-md-3 offset-md-3'>
-            <h3 className='text-center'>Add Employee</h3>
+            {pageTitle}
             <div className='card-body'>
                 <form>
                 <div className='form-group mb-2'>
