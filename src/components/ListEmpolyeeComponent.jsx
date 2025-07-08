@@ -1,4 +1,4 @@
-import React, {use, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { listEmployees } from '../services/EmployeeService';
 import { useNavigate } from 'react-router-dom';
 
@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router-dom';
 const ListEmpolyeeComponent = () => {
    
   const [employees, setEmployees] = useState([]);
+
+  const navigator = useNavigate();
 
   useEffect(() => {
     listEmployees().then((response) => {

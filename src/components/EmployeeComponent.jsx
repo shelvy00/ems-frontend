@@ -1,4 +1,6 @@
 import React, {useState } from 'react'
+import { createEmployee } from '../services/EmployeeService';
+import { useNavigate } from 'react-router-dom';
 
 const EmployeeComponent = () => {
 
@@ -6,11 +8,19 @@ const EmployeeComponent = () => {
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
 
+    const navigator = useNavigate();
     
     const saveEmployee = (e) => {
         e.preventDefault();
+        
         const employee = { firstName, lastName, email };
-    }    
+        console.log("Saving employee:", employee);
+
+        createEmployee(employee).then((response) => {
+          console.log("Employee created successfully", response.data);
+          navigator('/employees'); // Redirect to the employees list after successful creation
+        })
+    };    
 
   return (
     <div className='container'>
@@ -55,7 +65,7 @@ const EmployeeComponent = () => {
                     />
                 </div>
 
-                <button className='btn btn-success' onChange={saveEmployee}>Submit</button>
+                <button className='btn btn-success' onClick={saveEmployee}>Submit</button>
                 </form>
             </div>
         </div>
